@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Get the list of available Wi-Fi networks, remove empty lines and duplicates
+networks=$(nmcli -t -f SSID dev wifi | grep -v '^$' | grep -v '^--' | sort | uniq | rofi -dmenu -p 'Select Wi-Fi Network:' -theme ~/.config/rofi/config/wifi_menu.rasi)
+
+# If a network is selected, connect to it
+if [ -n "$networks" ]; then
+    nmcli dev wifi connect "$networks"
+fi
