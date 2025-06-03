@@ -1,8 +1,9 @@
 #!/usr/bin/bash
 
-if [ "$(cat /sys/class/power_supply/ACAD/online)" == 1 ]; then
+status=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep state | awk '{print $2}')
+if [ "$status" = "charging" ] || [ "$status" = "fully-charged" ]; then
     ~/.config/i3/scripts/miei/power_charge.sh
-    exit 1
+    exit 0
 fi
 
 level=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage | grep -o "[0-9]*")
