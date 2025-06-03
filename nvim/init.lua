@@ -185,10 +185,10 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -246,8 +246,28 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
+	{ import = "custom.plugins" },
 	-- catppuccin colorscheme
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+
+	{
+		"akinsho/bufferline.nvim",
+		version = "*",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("bufferline").setup({
+				options = {
+					mode = "buffers",
+					diagnostics = "nvim_lsp",
+					always_show_bufferline = true,
+				},
+			})
+			-- Buffer switching keymaps
+			vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
+			vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
+		end,
+	},
+
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	"NMAC427/guess-indent.nvim", -- Detect tabstop and shiftwidth automatically
 
@@ -430,7 +450,9 @@ require("lazy").setup({
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>sf", function()
+				builtin.find_files({ hidden = true })
+			end, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
@@ -695,7 +717,11 @@ require("lazy").setup({
 				--
 				-- But for many setups, the LSP (`ts_ls`) will work just fine
 				-- ts_ls = {},
-				--
+				omnisharp = {},
+				-- jdtls = {}, this wouldn't have worked anyways because we are using packaging very loosely in uni anyways and the lsp does NOT fuck with that
+				-- clangd = {}, couldn't get it to work with c and cpp simultaniously so i just give up honestly
+				-- hls = {}, i wanted to include this out of respect and then realized i don't have ghcup installed and then i realized i don't use haskell anyways so this gets commented out
+				pyright = {},
 
 				lua_ls = {
 					-- cmd = { ... },
@@ -757,35 +783,42 @@ require("lazy").setup({
 			{
 				"<leader>f",
 				function()
-					require("conform").format({ async = true, lsp_format = "fallback" })
+					require("conform").format({ async = true, lsp_fallback = true })
 				end,
-				mode = "",
+				mode = "n",
 				desc = "[F]ormat buffer",
 			},
 		},
 		opts = {
 			notify_on_error = false,
 			format_on_save = function(bufnr)
-				-- Disable "format_on_save lsp_fallback" for languages that don't
-				-- have a well standardized coding style. You can add additional
-				-- languages here or re-enable it for the disabled ones.
+				-- Disable format-on-save for C/C++ (edit this list as you wish)
 				local disable_filetypes = { c = true, cpp = true }
 				if disable_filetypes[vim.bo[bufnr].filetype] then
 					return nil
 				else
 					return {
 						timeout_ms = 500,
-						lsp_format = "fallback",
+						lsp_fallback = true,
 					}
 				end
 			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
-				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
-				--
-				-- You can use 'stop_after_first' to run the first available formatter from the list
-				-- javascript = { "prettierd", "prettier", stop_after_first = true },
+				python = { "black" },
+				rust = { "rustfmt" },
+				sh = { "shfmt" },
+				go = { "gofmt" },
+				javascript = { "prettier" },
+				typescript = { "prettier" },
+				json = { "prettier" },
+				yaml = { "prettier" },
+				markdown = { "prettier" },
+				html = { "prettier" },
+				css = { "prettier" },
+				c = { "clang_format" },
+				cpp = { "clang_format" },
+				-- add more as needed!
 			},
 		},
 	},
@@ -916,7 +949,7 @@ require("lazy").setup({
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
+		opts = { signs = true },
 	},
 
 	{ -- Collection of various small independent plugins/modules
