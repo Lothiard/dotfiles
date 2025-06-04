@@ -4,44 +4,44 @@
 #echo "#a6e3a1"
 #  󰁹󱐋
 
-level=$( upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage | grep -o "[0-9]*")
+level=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage | grep -o "[0-9]*")
 
 unit=20
-vite=$(($level/unit))
+vite=$(($level / unit))
 
 if [ $vite == 5 ]; then
-	echo "󱐋  $level%"
-	echo ""
-	echo "#cdd6f4"
+    echo "󱐋  $level%"
+    echo ""
+    echo "#a6e3a1"
 fi
 
 if [ $vite == 4 ]; then
-	echo "󱐋  $level%"
-	echo ""
-	echo "#a6e3a1"
+    echo "󱐋  $level%"
+    echo ""
+    echo "#a6e3a1"
 fi
 if [ $vite == 3 ]; then
-	echo "󱐋  $level%"
-	echo ""
-	echo "#a6e3a1"
+    echo "󱐋  $level%"
+    echo ""
+    echo "#a6e3a1"
 fi
 if [ $vite == 2 ]; then
-	echo "󱐋  $level%"
-	echo ""
-	echo "#fab387"
+    echo "󱐋  $level%"
+    echo ""
+    echo "#fab387"
 fi
 if [ $vite == 1 ]; then
-	echo "󱐋  $level%"
-	echo ""
-	echo "#fab387"
+    echo "󱐋  $level%"
+    echo ""
+    echo "#fab387"
 fi
 if [ "$level" -lt "20" ] && [ "$level" -ge "10" ]; then
-	echo "󱐋  $level%"
-	echo ""
-	echo "#f38ba8"
+    echo "󱐋  $level%"
+    echo ""
+    echo "#f38ba8"
 fi
 if [ "$level" -lt "10" ]; then
-	echo "󱐋 ! $level%"
-	echo ""
-	echo "#f38ba8"
+    echo "󱐋 ! $level%"
+    echo ""
+    echo "#f38ba8"
 fi
