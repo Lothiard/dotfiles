@@ -127,6 +127,7 @@ mode "" {
 
 bindsym $mod+r mode ""
 
+exec_always killall unclutter
 
 ######################################
 
