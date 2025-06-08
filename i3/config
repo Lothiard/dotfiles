@@ -395,6 +395,14 @@ exec_always --no-startup-id setxkbmap -layout us,hu -option grp:win_space_toggle
 # set floating (nontiling) for apps needing it
 
 for_window [class="nmtui"] floating enable, resize set 60 ppt 40 ppt, move position 80 ppt 70 ppt
+for_window [class="Godot"] floating enable
+for_window [class="Godot" window_role="popup"] floating enable
+for_window [class="Godot" window_type="dialog"] floating enable
+for_window [class="Godot" title="Create New Project"] floating enable
+for_window [class="Godot" title="Project Manager"] floating enable
+for_window [class="Godot" title="File Dialog"] floating enable
+for_window [class="Godot" title="Open Project"] floating enable
+for_window [class="Godot" title="Project Settings"] floating enable
 # for_window [class="Yad" instance="yad"] floating enable
 # for_window [class="Galculator" instance="galculator"] floating enable
 # for_window [class="Blueberry.py" instance="blueberry.py"] floating enable
