@@ -326,7 +326,7 @@ exec --no-startup-id dex --autostart --environment i3
 # start conky:
 #exec_always --no-startup-id conky
 
-exec_always --no-startup-id xrandr --output HDMI-1-0 --mode 1920x1080 --right-of eDP --auto
+exec_always --no-startup-id xrandr --output HDMI-1-0 --primary --mode 1920x1080 --pos 0x0 --output eDP --mode 1920x1080 --pos 1920x0 --left-of HDMI-1-0
 # set wallpaper
 # todo
 exec_always --no-startup-id ~/.local/bin/random-wallpaper.sh
