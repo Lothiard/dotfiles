@@ -5,8 +5,8 @@
 
 # See README.md for usage instructions
 bar_color="#a6da95"
-volume_step=1
-brightness_step=1%
+volume_step=5
+brightness_step=5%
 max_volume=100
 
 # Uses regex to get volume from pactl
@@ -29,7 +29,7 @@ function get_brightness {
 function get_volume_icon {
     volume=$(get_volume)
     mute=$(get_mute)
-    if [ "$volume" -eq 0 ] || [ "$mute" == "yes" ] ; then
+    if [ "$volume" -eq 0 ] || [ "$mute" == "yes" ]; then
         volume_icon="󰸈  "
     elif [ "$volume" -lt 50 ]; then
         volume_icon="󰕾  "
@@ -52,19 +52,19 @@ function show_volume_notif {
 
 # Displays a brightness notification using dunstify
 function show_brightness_notif {
-	massima=$(brightnessctl m)
-	brightness=$(($(get_brightness)*100/$massima))
+    massima=$(brightnessctl m)
+    brightness=$(($(get_brightness) * 100 / $massima))
     get_brightness_icon
     dunstify -t 1000 -r 2593 -u normal "$brightness_icon $brightness%" -h int:value:$brightness -h string:hlcolor:$bar_color
 }
 
 # Main function - Takes user input, "volume_up", "volume_down", "brightness_up", or "brightness_down"
 case $1 in
-    volume_up)
+volume_up)
     # Unmutes and increases volume, then displays the notification
     pactl set-sink-mute @DEFAULT_SINK@ 0
     volume=$(get_volume)
-    if [ $(( "$volume" + "$volume_step" )) -gt $max_volume ]; then
+    if [ $(("$volume" + "$volume_step")) -gt $max_volume ]; then
         pactl set-sink-volume @DEFAULT_SINK@ $max_volume%
     else
         pactl set-sink-volume @DEFAULT_SINK@ +$volume_step%
@@ -72,27 +72,27 @@ case $1 in
     show_volume_notif
     ;;
 
-    volume_down)
+volume_down)
     # Raises volume and displays the notification
     pactl set-sink-volume @DEFAULT_SINK@ -$volume_step%
     show_volume_notif
     ;;
 
-    volume_mute)
+volume_mute)
     # Toggles mute and displays the notification
     pactl set-sink-mute @DEFAULT_SINK@ toggle
     show_volume_notif
     ;;
 
-    brightness_up)
+brightness_up)
     # Increases brightness and displays the notification
-    brightnessctl s +$brightness_step  
+    brightnessctl s +$brightness_step
     show_brightness_notif
     ;;
 
-    brightness_down)
+brightness_down)
     # Decreases brightness and displays the notification
-    brightnessctl s  $brightness_step- 
+    brightnessctl s $brightness_step-
     show_brightness_notif
     ;;
 esac
