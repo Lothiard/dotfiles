@@ -256,10 +256,14 @@ require("lazy").setup({
 	-- typst for nvim
 	{ "kaarmu/typst.vim", ft = "typst" },
 
-	require("nvim-treesitter.configs").setup({
-		ensure_installed = { "typst" },
-	})(
-{
+	{
+		"chomosuke/typst-preview.nvim",
+		lazy = false, -- or ft = 'typst'
+		version = "1.3.2",
+		opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+	},
+
+	{
 		"akinsho/bufferline.nvim",
 		version = "*",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -275,7 +279,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
 			vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
 		end,
-	}),
+	},
 
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	"NMAC427/guess-indent.nvim", -- Detect tabstop and shiftwidth automatically
@@ -1016,6 +1020,7 @@ require("lazy").setup({
 				"query",
 				"vim",
 				"vimdoc",
+				"typst",
 			},
 			-- Autoinstall languages that are not installed
 			auto_install = true,
