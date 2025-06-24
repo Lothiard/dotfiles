@@ -253,7 +253,13 @@ require("lazy").setup({
 	-- catppuccin colorscheme
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 
-	{
+	-- typst for nvim
+	{ "kaarmu/typst.vim", ft = "typst" },
+
+	require("nvim-treesitter.configs").setup({
+		ensure_installed = { "typst" },
+	})(
+{
 		"akinsho/bufferline.nvim",
 		version = "*",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -269,7 +275,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", { desc = "Next buffer" })
 			vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
 		end,
-	},
+	}),
 
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	"NMAC427/guess-indent.nvim", -- Detect tabstop and shiftwidth automatically
