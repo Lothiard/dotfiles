@@ -305,10 +305,10 @@
     icon = /usr/share/icons/Arc-X-D/status/16/dialog-question.png
 
 [urgency_critical]
-    background = "#313244"
+    background = "#900000"
     foreground = "#ffffff"
-    frame_color = "#f38ba8"
-    timeout = 120
+    frame_color = "#ff0000"
+    timeout = 0
     # Icon for notifications with critical urgency, uncomment to enable
     icon = /usr/share/icons/Arc-X-D/status/16/dialog-warning.png
 
