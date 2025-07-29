@@ -651,7 +651,15 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				clangd = {},
+				clangd = {
+					on_attach = function(client, bufnr)
+						client.server_capabilities.documentFormattingProvider = false
+						client.server_capabilities.documentRangeFormattingProvider = false
+
+						-- Defensive: remove any auto-format on save for these buffers
+						vim.api.nvim_clear_autocmds({ buffer = bufnr, event = "BufWritePre" })
+					end,
+				},
 				-- gopls = {},
 				-- pyright = {},
 				-- rust_analyzer = {},
@@ -737,6 +745,10 @@ require("lazy").setup({
 		opts = {
 			notify_on_error = false,
 			format_on_save = function(bufnr)
+				local ft = vim.bo[bufnr].filetype
+				if ft == "c" or ft == "cpp" then
+					return false
+				end
 				return {
 					timeout_ms = 500,
 					lsp_fallback = true,
@@ -755,8 +767,8 @@ require("lazy").setup({
 				markdown = { "prettier" },
 				html = { "prettier" },
 				css = { "prettier" },
-				c = { "clang_format" },
-				cpp = { "clang_format" },
+				c = false,
+				cpp = false,
 				-- add more as needed!
 			},
 		},
