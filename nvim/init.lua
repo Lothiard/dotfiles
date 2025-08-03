@@ -662,14 +662,16 @@ require("lazy").setup({
 		"echasnovski/mini.nvim",
 		config = function()
 			-- Better Around/Inside textobjects
-			--
-			-- TODO: check shortcuts
+			-- TODO: check shortcuts https://github.com/echasnovski/mini.nvim
 			require("mini.ai").setup({ n_lines = 500 })
 			require("mini.surround").setup()
 
-			-- TODO: Check out: https://github.com/echasnovski/mini.nvim
+			require("mini.animate").setup()
+			require("mini.notify").setup()
+			require("mini.starter").setup()
 		end,
 	},
+
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
