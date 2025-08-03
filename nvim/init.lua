@@ -31,6 +31,8 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+vim.opt.shortmess:append("S")
+vim.opt.termguicolors = true
 
 vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
@@ -102,14 +104,13 @@ require("lazy").setup({
 			require("bufferline").setup({
 				options = {
 					themable = true,
-					numbers = "ordinal",
-					-- wanted to use this but it look ass with my font
-					-- indicator = {
-					--     style = "underline",
-					-- },
 					diagnostics = "nvim_lsp",
 					always_show_bufferline = true,
-					separator_style = "slope",
+				},
+				highlights = {
+					indicator_selected = {
+						fg = "#C586C0",
+					},
 				},
 			})
 
@@ -620,8 +621,11 @@ require("lazy").setup({
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
-		-- TODO: personalize
 		config = function()
+			require("catppuccin").setup({
+				auto_integrations = true,
+			})
+
 			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
@@ -633,6 +637,27 @@ require("lazy").setup({
 		opts = { signs = true },
 	},
 
+	{ -- lualine for statusline
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons", opt = true },
+		config = function()
+			require("lualine").setup({
+				options = {
+					theme = "palenight",
+					globalstatus = true,
+				},
+				sections = {
+					lualine_a = { "mode" },
+					lualine_b = { "branch", "diff", "diagnostics" },
+					lualine_c = { "hostname", "searchcount", "selectioncount" },
+					lualine_x = { "fileformat" },
+					lualine_y = { "lsp_status", "progress", "filesize" },
+					lualine_z = { "location" },
+				},
+			})
+		end,
+	},
+
 	{ -- Collection of various small independent plugins/modules
 		"echasnovski/mini.nvim",
 		config = function()
@@ -642,20 +667,7 @@ require("lazy").setup({
 			require("mini.ai").setup({ n_lines = 500 })
 			require("mini.surround").setup()
 
-			--  TODO: set up lualine instead of this ugly ahh
-			local statusline = require("mini.statusline")
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-			-- You can configure sections in the statusline by overriding their
-			-- default behavior. For example, here we set the section for
-			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
-
-			-- ... and there is more!
-			--  Check out: https://github.com/echasnovski/mini.nvim
+			-- TODO: Check out: https://github.com/echasnovski/mini.nvim
 		end,
 	},
 	{ -- Highlight, edit, and navigate code
