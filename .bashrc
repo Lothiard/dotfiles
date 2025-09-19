@@ -122,3 +122,4 @@ if command -v nvm &>/dev/null && [ -s "$HOME/.nvm/nvm.sh" ]; then
     . "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 fi
+export PATH="$HOME/nvim-linux-x86_64/bin:$PATH"
