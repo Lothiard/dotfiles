@@ -1,3 +1,6 @@
+[!IMPORTANT]
+This repo is no longer being maintained due to the fact I switched to Omarchy
+
 # dotfiles
 
 - The linux rice is mostly shamelessly copied from [Cattendeavour](https://github.com/jifuwater/Cattendeavour) and just slightly adjusted to taste.
