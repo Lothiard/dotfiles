@@ -1,5 +1,5 @@
-[!IMPORTANT]
-This repo is no longer being maintained due to the fact I switched to Omarchy
+> [!important]
+> This repo is no longer being maintained due to the fact I switched to Omarchy
 
 # dotfiles
 
